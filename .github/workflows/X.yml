@@ -5,13 +5,18 @@ on:
     types: [closed]
 
 jobs:
-  send-notification:
+  X:
     runs-on: ubuntu-latest
     if: github.event.issue.state_reason == 'completed' && github.event.sender.login == 'Ryoga-exe'
     steps:
       - name: Generate ct0
         id: gen_ct0
-        run: curl -s -I https://x.com/i/release_notes | grep ct0 | sed 's/.*ct0=\([a-f0-9]*\).*/ct0=\1/' >> $GITHUB_OUTPUT
+        run: |
+          curl -s -I https://x.com/home \
+          -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36' \
+          -b "auth_token=$auth_token" \
+          | grep ct0 \
+          | sed 's/.*ct0=\([a-f0-9]*\).*/ct0=\1/' >> $GITHUB_OUTPUT
       - name: X
         env:
           auth_token: ${{ secrets.auth_token }}
